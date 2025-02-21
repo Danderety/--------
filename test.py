@@ -38,11 +38,9 @@ def populate_table():
 def search_and_filter_table():
     query = search_var.get().strip().lower()
     
-    # Очищаем таблицу
     for row in table.get_children():
         table.delete(row)
     
-    # Заполняем таблицу заново
     hostname = socket.gethostname()
     os_name = platform.system()
     ipv4, netmask, mac_address = get_main_network_info()
@@ -55,7 +53,6 @@ def search_and_filter_table():
         ("Маска сети", netmask)
     ]
     
-    # Вставляем только те строки, которые соответствуют запросу
     for item in data:
         if query in item[0].lower() or query in item[1].lower():
             table.insert("", "end", values=item)
@@ -72,7 +69,7 @@ def save_to_file():
             writer.writerow(table.item(row, "values"))
 
 root = tk.Tk()
-root.title("Системная информация")
+root.title("Просмотр параметров")
 root.geometry("600x300")
 
 frame = tk.Frame(root)
@@ -94,12 +91,15 @@ table.pack(expand=True, fill="both")
 button_frame = tk.Frame(root)
 button_frame.pack(fill="x", side="bottom", padx=10, pady=5)
 
-btn_update = tk.Button(button_frame, text="Обновить", command=populate_table)
-btn_update.pack(side="left", expand=True, padx=5, pady=5)
+left_space = tk.Frame(button_frame)
+left_space.pack(side="left", expand=True, fill="x")
+
 
 btn_save = tk.Button(button_frame, text="Сохранить", command=save_to_file)
-btn_save.pack(side="left", expand=True, padx=5, pady=5)
+btn_save.pack(side="left", padx=5, pady=5)
 
-# Инициализация таблицы при запуске
+right_space = tk.Frame(button_frame)
+right_space.pack(side="left", expand=True, fill="x")
+
 populate_table()
 root.mainloop()
